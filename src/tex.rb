@@ -1,5 +1,3 @@
-#!/usr/bin/env ruby
-
 # Parse a tex file by treating the non-blank line after a \begin{document}
 #   declaration as the card front and any subsequent lines as the card back
 def parse_tex(tex_path)
@@ -56,18 +54,4 @@ def save_anki_file(anki_strs, path)
     rv = nil
   end
   return rv
-end
-
-# create multiple anki cards
-def main(filepaths, outpath)
-  parsed_objs = filepaths.map { |filepath| parse_tex(filepath) }
-  parsed_objs = parsed_objs.select { |parsed_obj| !parsed_obj.nil? }
-  anki_strs = parsed_objs.map { |parsed_obj| tex_to_anki(parsed_obj) }
-  rv = save_anki_file(anki_strs, outpath)
-end
-
-if $0 == __FILE__
-  outpath = ARGV[0]
-  filepaths = ARGV[1..-1]
-  rv = main(filepaths, outpath)
 end
