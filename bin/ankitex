@@ -1,4 +1,5 @@
 #!/usr/bin/env ruby
+require 'getoptlong'
 require 'ankitex'
 include Ankitex
 
@@ -10,9 +11,37 @@ def main(filepaths, outpath)
   rv = Parser.save_anki_file(anki_strs, outpath)
 end
 
-# @todo update CLI to getoptlong
 if $0 == __FILE__
-  outpath = ARGV[0]
-  filepaths = ARGV[1..-1]
-  rv = main(filepaths, outpath)
+  file_name = File.basename(__FILE__)
+  usage = "
+NAME
+\t#{file_name} - transform LaTeX documents into Anki flashcards.
+
+SYNOPSIS
+\t#{file_name} [-o {output_file}] <latex_files...>
+
+OPTIONS
+\t--help, -h\tDisplay this help
+\t--output, -o\tFile to write Anki flashcards to; defaults to flashcards.anki.txt
+"
+
+  # parse options
+  opts = GetoptLong.new(
+    ['--help', '-h', GetoptLong::NO_ARGUMENT],
+    ['--output', '-o', GetoptLong::REQUIRED_ARGUMENT]
+  )
+  output = nil
+  opts.each { |opt, arg|
+    case opt
+      when '--help'
+        $stdout.puts usage
+        exit 0
+      when '--output'
+        output = arg
+    end
+  }
+  output = "flashcards.anki.txt" if(output.nil?)
+    
+  filepaths = ARGV
+  rv = main(filepaths, output)
 end
