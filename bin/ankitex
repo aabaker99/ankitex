@@ -1,12 +1,13 @@
 #!/usr/bin/env ruby
-require 'tex'
+require 'ankitex'
+include Ankitex
 
 # create multiple anki cards
 def main(filepaths, outpath)
-  parsed_objs = filepaths.map { |filepath| parse_tex(filepath) }
+  parsed_objs = filepaths.map { |filepath| Parser.parse_tex(filepath) }
   parsed_objs = parsed_objs.select { |parsed_obj| !parsed_obj.nil? }
-  anki_strs = parsed_objs.map { |parsed_obj| tex_to_anki(parsed_obj) }
-  rv = save_anki_file(anki_strs, outpath)
+  anki_strs = parsed_objs.map { |parsed_obj| Parser.tex_to_anki(parsed_obj) }
+  rv = Parser.save_anki_file(anki_strs, outpath)
 end
 
 # @todo update CLI to getoptlong
