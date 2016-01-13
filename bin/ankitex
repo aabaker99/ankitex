@@ -5,9 +5,13 @@ include Ankitex
 
 # create multiple anki cards
 def main(filepaths, outpath)
-  parsed_objs = filepaths.map { |filepath| Parser.parse_tex(filepath) }
-  parsed_objs = parsed_objs.select { |parsed_obj| !parsed_obj.nil? }
-  anki_strs = parsed_objs.map { |parsed_obj| Parser.tex_to_anki(parsed_obj) }
+  all_parsed_objs = []
+  filepaths.each { |filepath| 
+    parser = Parser.new() 
+    file_parsed_objs = parser.parse_tex(filepath) 
+    all_parsed_objs += file_parsed_objs
+  }
+  anki_strs = all_parsed_objs.map { |parsed_obj| Parser.tex_to_anki(parsed_obj) }
   rv = Parser.save_anki_file(anki_strs, outpath)
 end
 
@@ -18,7 +22,7 @@ NAME
 \t#{file_name} - transform LaTeX documents into Anki flashcards.
 
 SYNOPSIS
-\t#{file_name} [-o {output_file}] <latex_files...>
+\t#{file_name} [-o <output_file>] <latex_files...>
 
 OPTIONS
 \t--help, -h\tDisplay this help
