@@ -11,8 +11,8 @@ def main(filepaths, outpath)
     file_parsed_objs = parser.parse_tex(filepath) 
     all_parsed_objs += file_parsed_objs
   }
-  anki_strs = all_parsed_objs.map { |parsed_obj| Parser.tex_to_anki(parsed_obj) }
-  rv = Parser.save_anki_file(anki_strs, outpath)
+  anki_strs = all_parsed_objs.map { |parsed_obj| Ankier.tex_to_anki(parsed_obj) }
+  rv = Ankier.save_anki_file(anki_strs, outpath)
 end
 
 if $0 == __FILE__

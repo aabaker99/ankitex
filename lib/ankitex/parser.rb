@@ -1,5 +1,6 @@
 module Ankitex
   # Default parser for LaTeX 
+  # @todo ignore \newcommand definitions
   class Parser
     
     # parser state enum
@@ -65,6 +66,9 @@ module Ankitex
       return rv
     end
 
+    # Append ch to str, terminate when an outer pair of braces is completed;
+    #   Utility function used by parse_tex to identify the initial {theorem-title}
+    #   and also the final {theorem-text}: 
     def append_section(str, ch, state, depth)
       if(ch == "{")
         depth += 1
@@ -81,44 +85,5 @@ module Ankitex
       end
       return [str, state, depth]
     end
-    
-    # To import plain text files into Anki:
-    #   (1) fields (e.g. "front" and "back")  must be separated by ";"  
-    #   (2) latex must be enclosed in [latex] [/latex] tags
-    #   (3) fields that span multiple lines must be quoted
-    #   (4) Files must end in a valid extension of which .txt is one
-    # @param [Hash] tex_obj @see parse_tex
-    # @return [String] an Anki record that can be imported
-    # @todo sanitize obj[:back] from '"' and "[latex]"
-    def self.tex_to_anki(tex_obj)
-      obj = Marshal.load(Marshal.dump(tex_obj))
-      obj[:back] = "\"[latex]#{obj[:back]}[/latex]\""
-      return "#{obj[:front]};#{obj[:back]}"
-    end
-    
-    def self.out_path(in_path)
-      ext = ".anki.txt"
-      dirname = File.dirname(filepath)
-      extname = File.extname(filepath)
-      basename = File.basename(filepath, extname)
-      return File.join(dirname, basename + ext)
-    end
-    
-    def self.save_anki_file(anki_strs, path)
-      rv = nil
-      unless(File.exists?(path))
-        File.open(path, "w") { |fh|
-          anki_strs.each { |anki_str|
-            fh.puts(anki_str)
-          }
-        }
-        rv = File.size(path)
-      else
-        $stderr.puts "Refusing to overwrite existing file #{path.inspect}"
-        rv = nil
-      end
-      return rv
-    end
-
   end
 end
