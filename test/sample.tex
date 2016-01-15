@@ -1,0 +1,19 @@
+\documentclass{article}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+
+\newcommand{\theorem}[2]{
+\textbf{#1} \\
+#2
+}
+
+\theorem{Definition 1.2.1 Sigma Algebra}{
+A collection of subsets of $S$ is called a \emph{sigma algebra} (or \emph{Borel field}) denoted by $\mathcal{B}$, if it satisifes the following three properties:
+\begin{enumerate}
+\item $\emptyset \in \mathcal{B}$
+\item If $A \in \mathcal{B}$, then $A^c \in \mathcal{B}$
+\item If $A_1, A_2 \ldots \in \mathcal{B}$, then $\cup_{i=1}^{\infty} \in \mathcal{B}$
+\end{enumerate}
+}
+
+\end{document}
