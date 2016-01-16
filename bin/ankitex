@@ -15,9 +15,8 @@ def main(filepaths, outpath)
   rv = Ankier.save_anki_file(anki_strs, outpath)
 end
 
-if $0 == __FILE__
-  file_name = File.basename(__FILE__)
-  usage = "
+file_name = File.basename(__FILE__)
+usage = "
 NAME
 \t#{file_name} - transform LaTeX documents into Anki flashcards.
 
@@ -29,23 +28,22 @@ OPTIONS
 \t--output, -o\tFile to write Anki flashcards to; defaults to flashcards.anki.txt
 "
 
-  # parse options
-  opts = GetoptLong.new(
-    ['--help', '-h', GetoptLong::NO_ARGUMENT],
-    ['--output', '-o', GetoptLong::REQUIRED_ARGUMENT]
-  )
-  output = nil
-  opts.each { |opt, arg|
-    case opt
-      when '--help'
-        $stdout.puts usage
-        exit 0
-      when '--output'
-        output = arg
-    end
-  }
-  output = "flashcards.anki.txt" if(output.nil?)
-    
-  filepaths = ARGV
-  rv = main(filepaths, output)
-end
+# parse options
+opts = GetoptLong.new(
+  ['--help', '-h', GetoptLong::NO_ARGUMENT],
+  ['--output', '-o', GetoptLong::REQUIRED_ARGUMENT]
+)
+output = nil
+opts.each { |opt, arg|
+  case opt
+    when '--help'
+      $stdout.puts usage
+      exit 0
+    when '--output'
+      output = arg
+  end
+}
+output = "flashcards.anki.txt" if(output.nil?)
+  
+filepaths = ARGV
+rv = main(filepaths, output)

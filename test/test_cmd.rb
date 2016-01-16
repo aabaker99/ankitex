@@ -24,7 +24,7 @@ EOS
       end
       File.rename(target_file, target_bak)
     end
-    `../bin/ankitex -o #{target_file} #{test_file}` # @todo fix install bin
+    `ankitex -o #{target_file} #{test_file}` # @todo fix install bin
     if($?.exitstatus != 0)
       raise "Command failed"
     end
